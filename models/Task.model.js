@@ -1,11 +1,17 @@
 const prisma = require('./prismaClient');
 
-module.exports.createTask = function createTask(name, statusId) {
+module.exports.createTask = function createTask(name, statusId, assignedPersonId = []) {
+  // Reference: https://www.prisma.io/docs/orm/prisma-schema/data-model/relations/many-to-many-relations#explicit-many-to-many-relations
   return prisma.task
     .create({
       data: {
         name,
         statusId,
+        persons: {
+          create: assignedPersonId.map((personId) => ({
+            person: { connect: { id: personId } },
+          })),
+        },
       },
     })
     .then((task) => {
@@ -19,7 +25,7 @@ module.exports.getAllTasks = function getAllTasks() {
     .findMany({
       include: {
         status: true,
-        persons: {
+        assignees: {
           include: {
             person: true,
           },
@@ -71,5 +77,19 @@ module.exports.deleteTask = function deleteTask(id) {
     .then((task) => {
       console.log('Task deleted:', task);
       return task;
+    });
+};
+
+module.exports.deleteTaskAssignment = function deleteTaskAssignment(taskId, personId) {
+  return prisma.taskAssignment
+    .delete({
+      where: {
+        // Reference: https://www.prisma.io/docs/orm/prisma-client/special-fields-and-types/working-with-composite-ids-and-constraints
+        assignmentId: { taskId: taskId, personId: personId },
+      },
+    })
+    .then((assignment) => {
+      console.log('Assignment deleted:', assignment);
+      return assignment;
     });
 };

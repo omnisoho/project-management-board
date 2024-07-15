@@ -3,6 +3,7 @@ const createError = require('http-errors');
 
 const taskRouter = require('./routers/Task.router');
 const statusRouter = require('./routers/Status.router');
+const personRouter = require('./routers/Person.router');
 
 const app = express();
 app.use(express.json());
@@ -10,6 +11,7 @@ app.use(express.json());
 app.use(express.static('public'));
 app.use('/tasks', taskRouter);
 app.use('/statuses', statusRouter);
+app.use('/persons', personRouter);
 
 app.use(function (req, res, next) {
   next(createError(404, `Unknown resource ${req.method} ${req.originalUrl}`));

@@ -15,7 +15,7 @@ model Task {
   name     String
   statusId Int
   status   Status           @relation(fields: [statusId], references: [id])
-  persons  TaskAssignment[]
+  assignees  TaskAssignment[]
 }
 
 model Status {
@@ -33,10 +33,11 @@ model Person {
 }
 
 model TaskAssignment {
-  id         Int      @id @default(autoincrement())
   taskId     Int
   task       Task     @relation(fields: [taskId], references: [id])
   personId   Int
   person     Person   @relation(fields: [personId], references: [id])
   assignedAt DateTime @default(now())
+
+  @@id(name: "assignmentId", [taskId, personId])
 }

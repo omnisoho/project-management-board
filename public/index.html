@@ -20,10 +20,18 @@
 
     <!-- Form to add new task -->
     <form id="taskForm">
-      <label for="taskName">Task Name:</label>
-      <input type="text" id="taskName" name="taskName" required />
-      <label for="taskStatus">Status:</label>
-      <select id="taskStatus" name="taskStatus" required></select>
+      <p>
+        <label for="taskName">Task Name:</label>
+        <input type="text" id="taskName" name="taskName" required />
+      </p>
+      <p>
+        <label for="taskStatus">Status:</label>
+        <select id="taskStatus" name="taskStatus" required></select>
+      </p>
+      <p>
+        <label for="assignees">Assign To:</label>
+        <select id="assignees" name="assignees" multiple required></select>
+      </p>
       <button type="submit">Add Task</button>
     </form>
 
@@ -36,6 +44,7 @@
           <th>ID</th>
           <th>Name</th>
           <th>Status</th>
+          <th>Assignees</th>
           <th>Actions</th>
         </tr>
       </thead>
@@ -51,95 +60,21 @@
         <td class="task-name"></td>
         <td class="task-status"></td>
         <td>
+          <ul class="task-assignees"></ul>
+        </td>
+        <td>
           <button class="delete-button">Delete</button>
         </td>
       </tr>
     </template>
 
-    <script>
-      const apiUrl = '.'; // Adjust this URL if your API is hosted elsewhere
+    <template id="assigneeLiTemplate">
+      <li>
+        <span class="assigneeName"></span>
+        <button class="unassignButton">❌</button>
+      </li>
+    </template>
 
-      // Function to populate the status options
-      function populateStatusOptions() {
-        fetch(`${apiUrl}/statuses`)
-          .then((response) => response.json())
-          .then((statuses) => {
-            const taskStatus = document.getElementById('taskStatus');
-            statuses.forEach((status) => {
-              const option = document.createElement('option');
-              option.value = status.id;
-              option.textContent = status.text;
-              taskStatus.appendChild(option);
-            });
-          })
-          .catch((error) => console.error('Error fetching statuses:', error));
-      }
-
-      // Function to populate the tasks table
-      function populateTasksTable() {
-        fetch(`${apiUrl}/tasks`)
-          .then((response) => response.json())
-          .then((tasks) => {
-            const tasksTableBody = document.getElementById('tasksTableBody');
-            const template = document.getElementById('taskRowTemplate').content;
-            tasksTableBody.innerHTML = ''; // Clear existing rows
-
-            tasks.forEach((task) => {
-              const row = document.importNode(template, true);
-              row.querySelector('.task-id').textContent = task.id;
-              row.querySelector('.task-name').textContent = task.name;
-              row.querySelector('.task-status').textContent = task.status.text;
-              row.querySelector('.delete-button').onclick = function () {
-                deleteTask(task.id);
-              };
-              tasksTableBody.appendChild(row);
-            });
-          })
-          .catch((error) => console.error('Error fetching tasks:', error));
-      }
-
-      // Function to add a new task
-      function addTask(event) {
-        event.preventDefault();
-        const taskName = document.getElementById('taskName').value;
-        const taskStatus = document.getElementById('taskStatus').value;
-
-        fetch(`${apiUrl}/tasks`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ name: taskName, statusId: +taskStatus }),
-        })
-          .then((response) => response.json())
-          .then((task) => {
-            populateTasksTable(); // Refresh the table
-            document.getElementById('taskForm').reset(); // Reset the form
-          })
-          .catch((error) => console.error('Error adding task:', error));
-      }
-
-      // Function to delete a task
-      function deleteTask(id) {
-        fetch(`${apiUrl}/tasks/${id}`, {
-          method: 'DELETE',
-        })
-          .then(() => {
-            populateTasksTable(); // Refresh the table
-          })
-          .catch((error) => console.error('Error deleting task:', error));
-      }
-
-      document.addEventListener('DOMContentLoaded', function () {
-        // Populate the status options on page load
-        populateStatusOptions();
-
-        // Event listener for form submission
-        document.getElementById('taskForm').addEventListener('submit', addTask);
-
-        // Populate the tasks table on page load
-        populateTasksTable();
-      });
-    </script>
+    <script src="./index.js" type="text/javascript"></script>
   </body>
 </html>

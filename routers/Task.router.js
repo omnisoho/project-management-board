@@ -6,12 +6,13 @@ const {
   getTasksByStatus,
   updateTask,
   deleteTask,
+  deleteTaskAssignment,
 } = require('../models/Task.model');
 
 // Create a new task
 router.post('/', (req, res, next) => {
-  const { name, statusId } = req.body;
-  createTask(name, statusId)
+  const { name, statusId, assignedPersonId } = req.body;
+  createTask(name, statusId, assignedPersonId)
     .then((task) => res.status(201).json(task))
     .catch(next);
 });
@@ -45,6 +46,13 @@ router.delete('/:id', (req, res, next) => {
   const { id } = req.params;
   deleteTask(parseInt(id))
     .then((task) => res.status(200).json(task))
+    .catch(next);
+});
+
+router.delete('/:taskId/assignee/:personId', (req, res, next) => {
+  const { taskId, personId } = req.params;
+  deleteTaskAssignment(+taskId, +personId)
+    .then((taskAssignment) => res.status(200).json(taskAssignment))
     .catch(next);
 });
 
