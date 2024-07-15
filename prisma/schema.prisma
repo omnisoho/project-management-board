@@ -34,9 +34,9 @@ model Person {
 
 model TaskAssignment {
   taskId     Int
-  task       Task     @relation(fields: [taskId], references: [id])
+  task       Task     @relation(fields: [taskId], references: [id], onDelete: Cascade)
   personId   Int
-  person     Person   @relation(fields: [personId], references: [id])
+  person     Person   @relation(fields: [personId], references: [id], onDelete: Cascade)
   assignedAt DateTime @default(now())
 
   @@id(name: "assignmentId", [taskId, personId])
