@@ -39,7 +39,8 @@ function populateTasksTable() {
     .then((tasks) => {
       const tasksTableBody = document.getElementById('tasksTableBody');
       const rowTemplate = document.getElementById('taskRowTemplate').content;
-      const assigneeLiTemplate = document.getElementById('assigneeLiTemplate').content;
+      const assigneeLiTemplate =
+        document.getElementById('assigneeLiTemplate').content;
       tasksTableBody.innerHTML = ''; // Clear existing rows
 
       tasks.forEach((task) => {
@@ -52,8 +53,8 @@ function populateTasksTable() {
         };
 
         const assigneeUl = row.querySelector('.task-assignees');
-        task.assignees.forEach((assignment) => {
-          const assigneeLi = createAssigneeLi(assigneeLiTemplate, task, assignment);
+        task.persons.forEach((person) => {
+          const assigneeLi = createAssigneeLi(assigneeLiTemplate, task, person);
           assigneeUl.appendChild(assigneeLi);
         });
 
@@ -65,7 +66,8 @@ function populateTasksTable() {
 
 function createAssigneeLi(assigneeLiTemplate, task, assignment) {
   const assigneeLi = document.importNode(assigneeLiTemplate, true);
-  assigneeLi.querySelector('.assigneeName').textContent = assignment.person.name;
+  assigneeLi.querySelector('.assigneeName').textContent =
+    assignment.person.name;
   assigneeLi.querySelector('.unassignButton').onclick = function () {
     fetch(`${apiUrl}/tasks/${task.id}/assignee/${assignment.person.id}`, {
       method: 'DELETE',
@@ -79,8 +81,12 @@ function addTask(event) {
   event.preventDefault();
   const taskName = document.getElementById('taskName').value;
   const taskStatus = document.getElementById('taskStatus').value;
-  const selectedAssigneesOptions = document.querySelectorAll('#assignees option:checked');
-  const selectedAssigneeIds = Array.from(selectedAssigneesOptions).map((option) => +option.value);
+  const selectedAssigneesOptions = document.querySelectorAll(
+    '#assignees option:checked',
+  );
+  const selectedAssigneeIds = Array.from(selectedAssigneesOptions).map(
+    (option) => +option.value,
+  );
 
   fetch(`${apiUrl}/tasks`, {
     method: 'POST',

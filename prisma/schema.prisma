@@ -15,7 +15,7 @@ model Task {
   name     String
   statusId Int
   status   Status           @relation(fields: [statusId], references: [id])
-  assignees  TaskAssignment[]
+  persons  TaskAssignment[]
 }
 
 model Status {

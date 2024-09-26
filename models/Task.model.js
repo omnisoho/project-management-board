@@ -25,7 +25,7 @@ module.exports.getAllTasks = function getAllTasks() {
     .findMany({
       include: {
         status: true,
-        assignees: {
+        persons: {
           include: {
             person: true,
           },
