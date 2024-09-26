@@ -22,7 +22,8 @@
     "postinstall": "npx prisma generate",
     "migration:dev": "dotenv -e .env.development -- npx prisma migrate dev",
     "migration:reset": "dotenv -e .env.development -- npx prisma migrate reset",
-    "start": "dotenv -e .env.development -- node server.js",
-    "test": "dotenv -e .env.test -- playwright test"
+    "start": "dotenv -e .env.development -- node ./src/server.js",
+    "test": "dotenv -e .env.test -- playwright test --config=configs/playwright.config.js",
+    "lint": "eslint -c configs/eslint.config.mjs ./src/*"
   }
 }

@@ -1,4 +1,4 @@
-const prisma = require('../models/prismaClient');
+const prisma = require('../src/models/prismaClient');
 
 const statuses = [
   { text: 'Pending' },
