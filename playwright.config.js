@@ -65,4 +65,6 @@ module.exports = defineConfig({
     url: 'http://127.0.0.1:3001',
     reuseExistingServer: !process.env.CI,
   },
+
+  globalSetup: require.resolve('./global-setup'),
 });
