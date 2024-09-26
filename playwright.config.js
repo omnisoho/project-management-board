@@ -66,5 +66,5 @@ module.exports = defineConfig({
     reuseExistingServer: !process.env.CI,
   },
 
-  globalSetup: require.resolve('./global-setup'),
+  globalSetup: require.resolve('./playwright-global-setup'),
 });
