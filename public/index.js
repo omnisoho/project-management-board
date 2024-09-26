@@ -118,7 +118,7 @@ function deleteTask(id) {
     .catch((error) => console.error('Error deleting task:', error));
 }
 
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', () => {
   // Populate the status options on page load
   populateStatusOptions();
 

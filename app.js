@@ -13,11 +13,12 @@ app.use('/tasks', taskRouter);
 app.use('/statuses', statusRouter);
 app.use('/persons', personRouter);
 
-app.use(function (req, res, next) {
+app.use((req, res, next) => {
   next(createError(404, `Unknown resource ${req.method} ${req.originalUrl}`));
 });
 
-app.use(function (error, req, res, next) {
+// eslint-disable-next-line no-unused-vars
+app.use((error, req, res, next) => {
   console.error(error);
   res
     .status(error.status || 500)
