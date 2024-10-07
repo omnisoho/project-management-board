@@ -29,9 +29,7 @@ jobs:
       # Step 4: Create .env file and set DATABASE_URL
       - name: Create .env file with DATABASE_URL
         run: |
-          echo "DATABASE_URL=${{ secrets.DATABASE_URL}}" >> .env
-          # Optional: Add other environment variables to .env if needed
-          echo "NODE_ENV=test" >> .env
+          echo "DATABASE_URL=${{ vars.DATABASE_URL}}" >> .env
 
       # Step 5: Display .env file for debugging (optional)
       - name: Show .env file (for debugging)
