@@ -58,6 +58,10 @@ test.describe('New Task', () => {
 test.describe('Load Tasks', () => {
   test('Should load tasks', async ({ page }) => {
     const rows = page.locator('#tasksTableBody').getByRole('row');
+
+    // Wait for tasks to load
+    await page.waitForTimeout(3000);
+
     await expect(await rows.count()).toBeGreaterThan(0);
   });
 
