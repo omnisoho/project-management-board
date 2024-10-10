@@ -30,7 +30,7 @@ jobs:
       - name: Run npm test
         run: |
           npm install
-          npx playwright install
+          npx playwright install --with-deps
           npx playwright test --config=configs/playwright.config.js
 
       - name: npm install, build
