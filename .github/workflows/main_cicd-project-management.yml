@@ -29,12 +29,12 @@ jobs:
       # Step 6: Run tests
       - name: Run npm test
         run: |
+          npm install
           npx playwright install
           npx playwright test --config=configs/playwright.config.js
 
       - name: npm install, build
         run: |
-          npm install
           npm run build --if-present
 
       - name: Zip artifact for deployment
