@@ -28,10 +28,18 @@ jobs:
 
       # Step 6: Run tests
       - name: Run npm test
+        id: e-2-e
         run: |
           npm install
           npx playwright install --with-deps
           npx playwright test --config=configs/playwright.config.js
+
+      - name: Upload test artifacts
+        if: ${{failure() && steps.e-2-e.conclusion == 'failure'}}
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-traces
+          path: test-results
 
       - name: npm install, build
         run: |
