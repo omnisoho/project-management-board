@@ -48,6 +48,8 @@ function populateTasksTable() {
         row.querySelector('.task-id').textContent = task.id;
         row.querySelector('.task-name').textContent = task.name;
         row.querySelector('.task-status').textContent = task.status.text;
+        row.querySelector('.task-priority').textContent = task.priority?task.priority:"None";
+        row.querySelector('.task-estimated-hours').textContent = task.estimatedHours?task.estimatedHours:"None";
         row.querySelector('.delete-button').onclick = function () {
           deleteTask(task.id);
         };
@@ -81,6 +83,8 @@ function addTask(event) {
   event.preventDefault();
   const taskName = document.getElementById('taskName').value;
   const taskStatus = document.getElementById('taskStatus').value;
+  const taskPriority = document.getElementById('priority').value;
+  const taskEstimatedHours = document.getElementById('estimatedHours').value;
   const selectedAssigneesOptions = document.querySelectorAll(
     '#assignees option:checked',
   );
@@ -96,6 +100,8 @@ function addTask(event) {
     body: JSON.stringify({
       name: taskName,
       statusId: +taskStatus,
+      priority: taskPriority,
+      estimatedHours: +taskEstimatedHours,
       assignedPersonId: selectedAssigneeIds,
     }),
   })

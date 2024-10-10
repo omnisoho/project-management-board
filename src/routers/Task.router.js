@@ -11,8 +11,8 @@ const {
 
 // Create a new task
 router.post('/', (req, res, next) => {
-  const { name, statusId, assignedPersonId } = req.body;
-  createTask(name, statusId, assignedPersonId)
+  const { name, statusId, assignedPersonId, priority, estimatedHours } = req.body;
+  createTask(name, statusId, assignedPersonId,  priority, estimatedHours)
     .then((task) => res.status(201).json(task))
     .catch(next);
 });

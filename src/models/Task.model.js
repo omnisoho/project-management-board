@@ -1,6 +1,6 @@
 const prisma = require('./prismaClient');
 
-module.exports.createTask = function createTask(name, statusId, assignedPersonId = []) {
+module.exports.createTask = function createTask(name, statusId, assignedPersonId = [],  priority, estimatedHours) {
   // Reference: https://www.prisma.io/docs/orm/prisma-schema/data-model/relations/many-to-many-relations#explicit-many-to-many-relations
   return prisma.task
     .create({
@@ -12,6 +12,8 @@ module.exports.createTask = function createTask(name, statusId, assignedPersonId
             person: { connect: { id: personId } },
           })),
         },
+        priority,
+        estimatedHours,
       },
     })
     .then((task) => {
