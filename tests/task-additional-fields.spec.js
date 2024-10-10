@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 
 test('test', async ({ page }) => {
-    await page.goto('http://localhost:3000/');
+    await page.goto('http://localhost:3001/');
     await page.getByLabel('Task Name:').click();
     await page.getByLabel('Task Name:').fill('Dry clothes');
     await page.getByLabel('Status:').selectOption('4');
