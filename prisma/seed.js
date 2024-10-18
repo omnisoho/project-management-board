@@ -9,10 +9,10 @@ const statuses = [
 
 // Seed Persons
 const persons = [
-  { email: 'alice@example.com', name: 'Alice' },
-  { email: 'bob@example.com', name: 'Bob' },
-  { email: 'carol@example.com', name: 'Carol' },
-  { email: 'dave@example.com', name: 'Dave' },
+  { email: 'alice@example.com', name: 'Alice' }, // Task 1
+  { email: 'bob@example.com', name: 'Bob' }, // Task 1
+  { email: 'carol@example.com', name: 'Carol' }, // Task 2
+  { email: 'dave@example.com', name: 'Dave' }, // Task 2
   { email: 'eve@example.com', name: 'Eve' },
   { email: 'frank@example.com', name: 'Frank' },
   { email: 'grace@example.com', name: 'Grace' },
@@ -34,25 +34,31 @@ const persons = [
 async function main() {
   // Seed Statuses
 
-  await Promise.all(
-    statuses.map((status) =>
-      prisma.status.upsert({
-        where: { text: status.text },
-        update: {},
-        create: status,
-      }),
-    ),
-  );
+  const insertedStatuses = await prisma.status.createManyAndReturn({
+    data: statuses,
+  });
 
-  await Promise.all(
-    persons.map((person) =>
-      prisma.person.upsert({
-        where: { email: person.email },
-        update: {},
-        create: person,
-      }),
-    ),
-  );
+  const insertedPersons = await prisma.person.createManyAndReturn({
+    data: persons,
+  });
+
+  console.log(insertedPersons, insertedStatuses);
+
+  const insertedTasks = await prisma.task.createManyAndReturn({
+    data: [
+      { name: 'Seed 1', statusId: insertedStatuses[0].id },
+      { name: 'Seed 2', statusId: insertedStatuses[1].id },
+    ],
+  });
+
+  await prisma.taskAssignment.createMany({
+    data: [
+      { personId: insertedPersons[0].id, taskId: insertedTasks[0].id },
+      { personId: insertedPersons[1].id, taskId: insertedTasks[0].id },
+      { personId: insertedPersons[2].id, taskId: insertedTasks[1].id },
+      { personId: insertedPersons[3].id, taskId: insertedTasks[1].id },
+    ],
+  });
 
   console.log('Seed data inserted successfully');
 }
