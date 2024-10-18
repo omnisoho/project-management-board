@@ -4,10 +4,11 @@ test.beforeEach(async ({ page }) => {
   await page.goto('http://localhost:3001');
 });
 
-const NEW_TASKS = ['buy some cheese', 'feed the cat'];
+const NEW_TASKS = ['buy some cheese', 'feed the cat', 'delete me'];
 
 const ASSIGNEES = [
   [0, 1],
+  [1, 2],
   [1, 2],
 ];
 
@@ -24,12 +25,11 @@ async function addTask(page, taskIndex) {
     { index: ASSIGNEES[taskIndex][1] },
   ]);
 
-  const rows = page.locator('#tasksTableBody').getByRole('row');
-  const initialNumberOfRows = await rows.count();
-
   await page.getByRole('button', { name: 'Add Task' }).click();
 
-  await expect(rows).toHaveCount(initialNumberOfRows + 1);
+  await expect(page.locator('#tasksTableBody')).toContainText(
+    NEW_TASKS[taskIndex],
+  );
 }
 
 test.describe('New Task', () => {
@@ -58,6 +58,7 @@ test.describe('New Task', () => {
 test.describe('Load Tasks', () => {
   test('Should load tasks', async ({ page }) => {
     const rows = page.locator('#tasksTableBody').getByRole('row');
+    await rows.first().waitFor();
     await expect(await rows.count()).toBeGreaterThan(0);
   });
 
@@ -69,10 +70,12 @@ test.describe('Update Task', () => {
     await addTask(page, 1);
 
     const rows = page.locator('#tasksTableBody').getByRole('row');
-    const newlyAddedRow = rows.last();
+    const newlyAddedRow = rows.filter({ hasText: NEW_TASKS[1] });
     await newlyAddedRow.getByRole('button', { name: '❌' }).first().click();
 
-    await expect(newlyAddedRow).toHaveCount(1);
+    await expect(newlyAddedRow.getByRole('button', { name: '❌' })).toHaveCount(
+      1,
+    );
   });
 
   // Feature suggestion: Should prevent removal if it is the last assignee
@@ -80,13 +83,16 @@ test.describe('Update Task', () => {
 
 test.describe('Delete Task', () => {
   test('Should allow me to remove task', async ({ page }) => {
-    const rows = page.locator('#tasksTableBody').getByRole('row');
-    const initialNumberOfRows = await rows.count();
+    await addTask(page, 2);
 
-    const newlyAddedRow = rows.last();
+    const rows = page.locator('#tasksTableBody').getByRole('row');
+
+    const newlyAddedRow = rows.filter({ hasText: NEW_TASKS[2] });
     await newlyAddedRow.getByRole('button', { name: 'Delete' }).click();
 
-    await expect(rows).toHaveCount(initialNumberOfRows - 1);
+    await expect(page.locator('#tasksTableBody')).not.toContainText(
+      NEW_TASKS[2],
+    );
   });
 
   // Feature suggestion: Add a new state "Cancelled" and prevent deletion unless it is "Cancelled" or "Completed"
