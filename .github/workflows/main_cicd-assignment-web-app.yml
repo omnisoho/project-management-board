@@ -26,12 +26,14 @@ jobs:
         with:
           node-version: '18.x'
 
+      - name: npm install project dependencies
+        run: npm install
+
       - name: Install playwright browsers
         run: npx playwright install
 
-      - name: npm install, build, and test
+      - name: build, and test
         run: |
-          npm install
           npm run build --if-present
           npm run test --if-present
 
