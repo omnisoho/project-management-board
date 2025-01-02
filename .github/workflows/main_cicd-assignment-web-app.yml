@@ -10,6 +10,7 @@ on:
   workflow_dispatch:
 
 env:
+  DATABASE_URL: ${{ vars.DATABASE_URL}}
   PORT: ${{ vars.PORT}}
 
 jobs:
