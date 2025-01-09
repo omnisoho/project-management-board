@@ -1,7 +1,7 @@
 # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 
-name: Build and deploy Node.js app to Azure Web App - cicd-assignment-2-1
+name: testing events to upstream, simplified, working deployment - cicd-assignment-2-1
 
 on:
   push:
@@ -16,7 +16,6 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
-    environment: production
 
     steps:
       - uses: actions/checkout@v4
