@@ -16,7 +16,11 @@ env:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    environment: production
+    environment:
+      name: 'Production'
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+    permissions:
+      id-token: write # Required for requesting the JWT
 
     steps:
       - uses: actions/checkout@v4
@@ -37,12 +41,7 @@ jobs:
           npm run build --if-present
           npm run test --if-present
 
-      - name: Login to 
-        environment:
-          name: 'Production'
-          url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-        permissions:
-          id-token: write #This is required for requesting the JWT                
+      - name: Login to Azure
         uses: azure/login@v2
         with:
           client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_F645714028524ED29F1992409450E450 }}
