@@ -17,7 +17,9 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     environment: production
-
+    permissions:
+      id-token: write #This is required for requesting the JWT
+      
     steps:
       - uses: actions/checkout@v4
 
