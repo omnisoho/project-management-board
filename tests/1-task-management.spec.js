@@ -36,7 +36,7 @@ async function addTask(page, taskIndex) {
   const statusInput = page.getByLabel('Status');
   await statusInput.selectOption({ label: 'Pending' });
 
-  const assigneesInput = page.getByLabel('Assign To');
+  const assigneesInput = page.getByLabel('Assign To [WRONG]');
   await assigneesInput.selectOption([
     { index: ASSIGNEES[taskIndex][0] },
     { index: ASSIGNEES[taskIndex][1] },
