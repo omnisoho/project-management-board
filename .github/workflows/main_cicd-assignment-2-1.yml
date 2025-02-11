@@ -42,12 +42,8 @@ jobs:
           npm run build --if-present
           npm run test --if-present
 
-      - name: Create deployment directory
-        run: |
-          mkdir build_deploy
-          cp -r ./* build_deploy/
-          rm -rf build_deploy/node_modules
-          # Any other cleanup
+      - name: Zip artifact for deployment without node_modules
+        run: zip -r release.zip ./* -x "node_modules/*"
 
       # - name: Upload test artifacts
       #   if: failure()
@@ -69,4 +65,4 @@ jobs:
         with:
           app-name: 'cicd-assignment-2-1'
           slot-name: 'Production'
-          package: build_deploy  # Deploy directly from the build directory
+          package: .
