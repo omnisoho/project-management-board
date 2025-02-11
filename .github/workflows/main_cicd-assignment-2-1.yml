@@ -21,6 +21,7 @@ jobs:
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
     permissions:
       id-token: write # Required for requesting the JWT
+      contents: read
 
     steps:
       - uses: actions/checkout@v4
@@ -40,6 +41,13 @@ jobs:
         run: |
           npm run build --if-present
           npm run test --if-present
+
+      - name: Create deployment directory
+        run: |
+          mkdir build_deploy
+          cp -r ./* build_deploy/
+          rm -rf build_deploy/node_modules
+          # Any other cleanup
 
       # - name: Upload test artifacts
       #   if: failure()
@@ -61,4 +69,4 @@ jobs:
         with:
           app-name: 'cicd-assignment-2-1'
           slot-name: 'Production'
-          package: .
+          package: build_deploy  # Deploy directly from the build directory
